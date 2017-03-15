@@ -1,0 +1,164 @@
+sqrt
+abstraction boundary between these
+good-enough?
+
+Whats the sum of 1/2 and 1/4 = 3/4. Whats 3/4 * 2/3 = 1/2
+
+n1/d1 + n2/d2 = (n1d2 + n2d1)/(d1*d2)
+
+n1/d1 * n2/d2 = n1*n2/d1*d2
+
+Wishful thinking design strategy
+
+(make-rat n d) --> cloud( n and d) constructor
+(numer cloud) --> N selector
+(denom cloud) --> D selector
+
+rational addition
+(define (+ rat x y)
+ (make-rat
+   (+ (* (numer x) (denom y))
+      (* (numer y) (denom x)))
+   (* (denom x) (denom y))))
+
+rational multiplication
+(define (*rat x y)
+  (make-rat
+    (* (numer x) (numer y))
+    (* (denom x) (denom y))))
+
+(x + y) * (s + t)
+(*rat (+rat x y) (+rat s t))
+
+How do we make this rational number package?
+list structure is a way of gluing things together
+can construct pairs
+
+(cons x y)- constructs a pair whose first part is x and whose second part is y
+(car p) selects the first part of the pair p
+(cdr p) selects the second part of the pair p
+
+(cons 2 3)
+
+     [ ][ ]
+      |  |
+      2  3 Box and pointer notation
+
+(car (cons x y)) is x
+(cdr (cons x y)) is y
+
+(define (make-rat n d)
+  (cons n d))
+(define (numer x)
+  (car x))
+(define (denom y)
+  (cdr y))
+
+1/2 + 1/4
+
+(define A (make-rat 1 2))
+(define B (make-rat 1 4))
+(define ans (+rat A B))
+(numer ans) ---> 6
+(denom ans) ---> 8
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (cons (/ n g)
+          (/ d g))))
+
+Use of data objects
++rat *rat -rat
+_____________
+make-rat/numer/denom  layer of abstraction
+_____________
+
+Representation of data objects
+
+This is called data abstraction, programming methodology by using constructors
+and selectors. So why?
+
+It allows you to delay design decisions. Implement top level by wishful thinking
+and deal with details later.
+
+Whenver someone shows you a system for controlling complexity ask what you can
+build with it.
+
+* point in the plane (x, y)
+
+(define (make-vector x y) (cons x y))
+(define (xcor p) (car p))
+(define (ycor p) (cdr p))
+
+(define (make-seq p q) (cons p q))
+(define (seq-start s) (car s))
+(define (seg-end s) (cdr s))
+
+(define (midpoint s)
+  (let ((a (seq-start s))
+        (b (seg-end s)))
+    (make-vector
+      (average (xcor a) (xcor b))
+      (average (ycor a) (ycor b)))))
+
+(define (length s)
+  (let
+   ((dx (- (xcor (seg-end s))
+           (xcor (seq-start s)))))
+    (dy (- (ycor (seg-end s))
+           (ycor (seg-start s))))
+    (sqrt (+ (square dx)
+             (square dy)))))
+
+Layered system
+
+Segments
+----------------------
+make-seg/segstart/segend
+------------------------
+vectors
+--------------------
+make-vector/xcor/ycor
+--------------------
+pairs numbers
+
+        segment
+         [ ][ ]
+       p  |  |  q
+     [ ][ ]  [ ][ ]
+      |  |    |  |
+      1  2    2  3
+closure- means of combination, when something is closed you can make
+a combination of the combinations
+
+We started by defining procedures in terms of abstract data.
+If x = (make-rat n d)
+then:
+    (numer x)     N
+    ---------  = ---
+    (denom x)     D
+If it does this, then we don't care HOW its done. That is all that matters
+
+rational numbers
+---------------
+--------------
+pairs
+--------------
+--------------
+
+(define (cons a b)
+  (lambda (pick)
+    (cond ((= pick 1) a)
+          ((= pick 2) b))))
+(define (car x) (x 1))
+(define (cdr x) (x 2))
+
+No data at all in that representation, only procedures
+
+Axiom of pairs
+
+For any x y
+
+(car (cons x y)) is x
+(cdr (cons x y)) is y
+
+Blurs the line between whats data and whats a procedure

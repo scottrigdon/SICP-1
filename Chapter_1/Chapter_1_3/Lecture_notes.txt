@@ -1,0 +1,131 @@
+sum from i = a to b. Write a program that adds up those integers
+
+(define (sum-int a b)
+  (If (> a b)
+      0
+      (+ a
+         (sum-int (1+ a) b))))
+sum of squares of i = a to b.
+
+(define (sum-sq a b)
+  (If (> a b)
+      0
+      (+ (square a)
+         (sum-sq (1+ a) b))))
+
+Basically the same procedure for each except the square.
+
+Leibnitz formula for finding pi/8
+
+(define (pi-sum a b)
+  (if (> a b)
+      0
+      (+ (/ 1 (* a (+ a 2)))
+         (pi-sum (+ a 4) b))))
+
+General pattern that covers all the cases we have seen so far:
+(define (<name> a b)
+  (if (> a b)
+      0
+      (+ (<term> a)
+         (<name> (<next> a) b))))
+
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term
+              (next a)
+              next
+              b))))
+
+(define (sum int a b)
+  (define (indentity a) a)
+  (sum indentity a 1+ b))
+
+(define (sum-sq a b)
+  (sum square a 1+ b))
+
+(define (pi-sum a b)
+  (sum (lambda (i) (/ 1 (* i (+ 1 2))) a (lambda (i) (+ i 4)) b)))
+
+Most complicated procedure seen so far. Heron of alexandrias method of computing
+sqrts:
+(define (sqrt x)
+  (define tolerance 0.00001)
+  (define (good-enuf? y)
+    (< (abs (- (* y y) x)) tolerance))
+  (define (improve y)
+    (average (/ x y) y))
+  (define (try y)
+    (if (good-enuf? y)
+        y
+        (try (improve y))))
+  (try 1))
+
+     f
+y |----> (y + x/y)/2
+f(sqrt(x)) = sqrt(x)
+Looking for a fixed-point of the function f. A fixed point is a place that has
+the property "if you put it into the function you get the same value back".
+Some functions have the property that you can find a fixed point by iterating
+the function, and thats what is happening in the square root program by Herons
+method.
+
+(define (sqrt x)
+  (fixed-point
+       (lambda (y) (average (/ x y) y))
+       1))
+
+(define (fixed-point f start)
+  (define tolerance 0.00001)
+  (define (close-enuf? u v)
+    (< (abs (- u v)) tolerance))
+  (define (iter old new)
+    (if (close-enuf? old new)
+        new
+        (iter new (f new))))
+  (iter start (f start)))
+
+Surely there must be other ways to get a fixed point.
+    g
+y |---> x/y
+
+(define (sqrt x)
+  (fixed-point
+      (average-damp (lambda(y)(/ x y)))
+      1))
+  (define average-damp
+    (lambda (f)
+            (lambda (x) (average (f x) x))))
+Procedure without lambdas
+(define (average-damp f)
+   (define (foo x)
+      (average (f x) x))
+   foo)
+
+Play with lambdas even more. General method called Newtons method to find the
+roots (zeros) of functions. For example to f find a y such that f(y) = 0.
+Start with a guess, y0
+yn+1 = yn - f(yn)/ df/dy |y=yn
+
+(define (sqrt x)
+  (newton (lambda (y) (- x (square y)))
+          1))
+
+(define (newton f guess)
+  (define df (deriv f))
+  (fixed-point
+    (lambda (x) (- x (/ (f x) (df x))))
+    guess))
+(define dx 0.000000001)
+(define deriv
+  (lambda (f)
+    (lambda (x)
+            (/ (- (f (+ x dx))
+                  (f x))
+               dx))))
+(define (newton f guess)
+  (fixed-point
+    (lambda(x) (-x (/ (f x) ( (deriv f) x))))
+    guess))
