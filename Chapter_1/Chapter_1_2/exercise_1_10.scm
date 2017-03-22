@@ -10,7 +10,8 @@
 
 ; What are the values of the following expressions?
 (A 1 10)
-; only way to figure this out is to lay it out
+; one way to figure this out is apply applicative order evaluation all the way
+; through
 ; (A 1 10)
 ; (A 0 (A 1 9))
 ; (A 0 (A 0 (A 1 8)))

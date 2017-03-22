@@ -10,7 +10,7 @@
 ; transformation Tp'q' of the same form, and compute p' and q' in terms of p
 ; and q. This gives us an explicit way to square these transformations, and thus
 ; we can compute T^n using successive squaring as in the fast-expt procedure.
-; Pyt this all together to complete the following procedure, which runs in a
+; Put this all together to complete the following procedure, which runs in a
 ; logarithmic number of steps:
 
 ; Tpq(a, b):

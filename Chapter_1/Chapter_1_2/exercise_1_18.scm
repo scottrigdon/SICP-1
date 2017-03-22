@@ -13,6 +13,8 @@
 (define (even? n)
   (= (remainder n 2) 0))
 
+; once again this is almost identical to exercise 1.16's iterative solution for
+; exponentials
 (define (fast* b n)
   (*_iter b n 0))
 (define (*_iter b n a)

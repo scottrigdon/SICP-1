@@ -21,12 +21,15 @@
 
 (define (even? n)
   (= (remainder n 2) 0))
-; taken from an SICP blog, I vaguely understand this
+; had to take this from an SICP blog to get this. To check for a "nontrivial
+; square root of 1 modulo n" You can add a check to every time you would
+; normally square the value. You return 0 if the value is not 1 or n-1 and
+; it is prime
 (define (square-check x m)
     (if (and (not (or (= x 1) (= x (- m 1))))
-                        (= (remainder (* x x) m) 1))
+             (= (remainder (* x x) m) 1))
             0
-                  (remainder (* x x) m)))
+        (remainder (* x x) m)))
 
 (define (expmod base exp m)
   (cond ((= exp 0) 1)

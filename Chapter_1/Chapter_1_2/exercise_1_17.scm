@@ -26,8 +26,7 @@
   (= (remainder n 2) 0))
 
 ; Now define recursive algorithim for multiplication
-; multiplications by an even amount would be equal to 
-
+; this looks almost identical to the recursive algorithm defined for fast-expt
 (define (fast* b n)
   (cond ((= n 0) 0)
         ((even? n) (double (fast* b (halve n))))
