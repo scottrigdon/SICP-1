@@ -19,9 +19,13 @@
 
 ; iterative is easier for me to think about so lets start with that
 (define (cont-frac n d k)
+  ; here i is a counter and res is the result
   (define (cont-iter i res)
+    ; once the counter gets down to 0 we return the result
     (if (= i 0)
         res
+        ; otherwise you decrement the counter by 1 and divide numerator at i by
+        ; the denominator at i (+ the already accumulating result)
         (cont-iter (- i 1)
                    (/ (n i) (+ (d i) res)))))
   (cont-iter k 0.0))

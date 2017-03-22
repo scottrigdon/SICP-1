@@ -9,14 +9,17 @@
 ; if n-2 % 3 = 0 then k = (n-2)/3*2 + 2
 ; else k = 1
 
-; this is a convoluted way to do it, but it works
+; Here we need to define a procedure to return the denominator for i
 (define (denom-euler i)
+  ; If its 1 or 2 we just return those values
   (cond ((or (= i 1) (= i 2))
          i)
+        ; otherwise we return that pattern I defined above
         ((= (remainder (- i 2) 3) 0)
         (+ (* (/ (- i 2) 3) 2) 2))
         (else 1)))
 
+; this is my iterative procedure from 1.37
 (define (cont-frac n d k)
   (define (cont-iter i res)
     (if (= i 0)

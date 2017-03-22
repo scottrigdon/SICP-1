@@ -9,13 +9,14 @@
 ; and repeated from exercise 1.43.
 
 (define dx 0.000001)
+; smooth is just a simple average of the three points with dx defined above
 (define (smooth f)
   (lambda (x) (/ (+ (f (- x dx)) 
                     (f x) 
                     (f (+ x dx))) 
                  3)))
 
-
+; compose and repeated from previous exercises
 (define (compose f g)
   (lambda (x) (f (g x))))
 
@@ -27,5 +28,4 @@
 (define (repeat-smooth f n)
   ((repeated smooth n) f))
 
-; no idea how to test this
 

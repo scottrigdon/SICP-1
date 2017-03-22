@@ -3,16 +3,23 @@
 ; (newtons-method (cubic a b c) 1)
 ; to approximate zeros of the cubic x^3 + ax^2 + bx + c
 
+; Taken from the text
+; first define a procedure for the derivative of a function, this returns an
+; anonymous function for the derivative that just takes a point x
 (define (deriv g)
   (lambda (x)
     (/ (- (g (+ x dx)) (g x))
        dx)))
+
+; define the dx size that we are going to use
 (define dx 0.00001)
 
+; newton transform needed for newtons method
 (define (newton-transform g)
   (lambda (x)
     (- x (/ (g x) ((deriv g) x)))))
 
+; fixed point procedure
 (define tolerance 0.00001)
 (define (fixed-point f first-guess)
   (define (close-enough? v1 v2)
@@ -24,9 +31,11 @@
           (try next))))
   (try first-guess))
 
+; Finally newtons method is just finding the fixed point of the newton transform
 (define (newtons-method g guess)
   (fixed-point (newton-transform g) guess))
 
+; My code, cubic procedure
 (define (cubic a b c)
   (lambda (x) (+ (* x x x) (* a x x) (* b x) c)))
 ; should be -1.27 ish
