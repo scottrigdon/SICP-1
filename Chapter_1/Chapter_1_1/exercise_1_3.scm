@@ -21,9 +21,8 @@
 ; (larger (smaller x y) (smaller y z)) gives you the second largest number of
 ; the 3 by first getting the 2 smallest numbers, and then returning the largest
 ; of those two.
-(define (final x y z) (sum_of_squares (larger x (larger y z))
-                                      (larger (smaller x y)
-                                              (smaller y z))))
+(define (final x y z) (sum_of_squares (larger x y)
+                                      (larger (smaller x y) z)))
 ;tests
 ; expect 13 for all
 (final 1 2 3)
